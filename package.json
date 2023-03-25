@@ -1,0 +1,17 @@
+{
+	"author": "Kar Sahatchian",
+	"description": "At the initial point this project is just a simple script that will download mp3 files from YouTube videos which will be found using the names described as names of files in mentioned folder or by reading them from a .txt file. The results will be saved at the selected location",
+	"keywords": [
+		"Music",
+		"MP3",
+		"YouTube",
+		"Downloader"
+	],
+	"license": "ISC",
+	"main": "index.js",
+	"name": "music-downloader",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"version": "0.0.0"
+}
