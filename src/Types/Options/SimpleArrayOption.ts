@@ -1,5 +1,5 @@
-import { YargOptionType } from '../../TypeDefs/OptionsTypeDefs.js';
-import { BaseOption } from '../BaseOption.js';
+import { YargOptionType } from '../TypeDefs/OptionsTypeDefs.js';
+import { BaseOption } from './BaseOption.js';
 
 
 export class SimpleArrayOption extends BaseOption {

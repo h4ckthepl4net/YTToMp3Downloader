@@ -6,7 +6,7 @@ import { osLocaleSync } from 'os-locale';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { SimpleArrayOption } from './Types/Options/Arrays/SimpleArrayOption.js';
+import { SimpleArrayOption } from './Types/Options/SimpleArrayOption.js';
 import { Locale } from './Locales/Locale.js';
 import { LocaleKeys } from './Constants/LocaleKeys.js';
 
