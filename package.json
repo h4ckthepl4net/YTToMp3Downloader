@@ -1,5 +1,6 @@
 {
 	"author": "Kar Sahatchian",
+	"type": "module",
 	"description": "At the initial point this project is just a simple script that will download mp3 files from YouTube videos which will be found using the names described as names of files in mentioned folder or by reading them from a .txt file. The results will be saved at the selected location",
 	"keywords": [
 		"Music",
@@ -15,6 +16,8 @@
 	},
 	"version": "0.0.0",
 	"dependencies": {
+		"@types/node": "^18.15.10",
+		"os-locale": "^6.0.2",
 		"puppeteer": "^19.8.0",
 		"typescript": "^5.0.2",
 		"yargs": "^17.7.1"
