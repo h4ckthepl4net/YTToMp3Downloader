@@ -2,6 +2,6 @@
 	"tracks_description": "Track names to download",
 	"track_dir_description": "Directory to download tracks by reading names from files in this directory",
 	"location_is_not_dir": "Mentioned location is not a directory: ${1}",
-	"directory_doesnt_exists": "Cannot resolve mentioned output directory: ${1}"
-
+	"directory_doesnt_exists": "Cannot resolve mentioned output directory: ${1}",
+	"out_dir_description": "Output directory"
 }

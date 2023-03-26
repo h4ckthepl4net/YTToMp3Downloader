@@ -51,3 +51,21 @@ export class PathTooLongException extends Error {
         super(message);
     }
 }
+
+export class FileAlreadyExistsException extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class FileNameTooLongException extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class ReadOnlyFSException extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}

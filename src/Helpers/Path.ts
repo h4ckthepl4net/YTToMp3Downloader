@@ -15,4 +15,6 @@ export default class Path {
     public static join = path.join;
 
     public static resolve = path.resolve;
+
+    public static sep = path.sep;
 }
