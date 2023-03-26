@@ -1,6 +1,8 @@
+import Path from '../Helpers/Path.js';
 import FileSystem from '../Helpers/FileSystem.js';
 import JSON from '../Helpers/JSON.js';
 import { ParsedLocale, LocaleFileReadResult } from '../Types/TypeDefs/LocaleTypeDefs.js';
+import { LocaleKeys } from '../Constants/LocaleKeys.js';
 
 export class Locale {
     private parsed: ParsedLocale;
@@ -11,17 +13,27 @@ export class Locale {
         this.parsed = result.parsed;
     }
 
-    public get(key: string): string {
+    public get(key: LocaleKeys, args: Array<any> | null = null): string {
+        if (!this.parsed[key]) {
+            return key;
+        }
+        const text = this.parsed[key];
+        if (args && args instanceof Array) {
+            args.forEach((arg: any, index: number) => {
+                text.replace(`\${${index}}`, arg);
+            })
+        }
         return this.parsed[key];
     }
 
     private static readLocaleFile(localeFile: string, fallback: string | null = null): LocaleFileReadResult {
-        let path = `./i18n/${localeFile}.json`;
-        if (!FileSystem.existsSync(path)) {
+        const __dirname = Path.dirnameFromFileUrl(import.meta.url);
+        let pathToCheck = Path.resolve(__dirname, `./i18n/${localeFile}.json`);
+        if (!FileSystem.existsSync(pathToCheck)) {
             let errorMessage = `Cannot find locale file for locale: ${localeFile}`;
             if (fallback) {
-                path = `./i18n/${fallback}.json`;
-                if (!FileSystem.existsSync(path)) {
+                pathToCheck = Path.resolve(__dirname, `./i18n/${fallback}.json`);
+                if (!FileSystem.existsSync(pathToCheck)) {
                     errorMessage += ` or fallback locale file for locale: ${fallback}`;
                     throw new ReferenceError(errorMessage);
                 }
@@ -30,7 +42,7 @@ export class Locale {
             }
         }
 
-        const json: string = FileSystem.readFileSync(path, 'utf8') as string;
+        const json: string = FileSystem.readFileSync(pathToCheck, 'utf8') as string;
         const parsed: ParsedLocale = JSON.parse(json) as ParsedLocale;
 
         return {

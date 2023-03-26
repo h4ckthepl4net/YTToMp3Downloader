@@ -8,6 +8,7 @@ import { hideBin } from 'yargs/helpers';
 
 import { SimpleArrayOption } from './Types/Options/Arrays/SimpleArrayOption.js';
 import { Locale } from './Locales/Locale.js';
+import { LocaleKeys } from './Constants/LocaleKeys.js';
 
 
 // Getting system locale
@@ -18,11 +19,11 @@ const app_i18n: Locale = new Locale(sys_locale);
 
 const argv = yargs(hideBin(process.argv))
     .locale(sys_locale)
-    .option('tracks', new SimpleArrayOption('t', 'Track names to download'))
+    .option('tracks', new SimpleArrayOption('t', app_i18n.get(LocaleKeys.TRACKS_DESC)))
     .option('trackDir', {
         alias: 'd',
         type: 'string',
-        description: 'Directory to download tracks by reading names from files in this directory',
+        description: app_i18n.get(LocaleKeys.TRACK_DIR_DESC),
         normalize: true,
         coerce: (arg: string): string => { // TODO move to helpers file
             const absPath = path.resolve(arg);
@@ -30,9 +31,9 @@ const argv = yargs(hideBin(process.argv))
                 if (fs.statSync(absPath).isDirectory()) {
                     return absPath;
                 }
-                throw new Error(`Mentioned location is not a directory: ${arg}`);
+                throw new Error(app_i18n.get(LocaleKeys.LOCATION_IS_NOT_DIR, [arg]));
             }
-            throw new Error(`Cannot resolve mentioned output directory: ${arg}`);
+            throw new Error(app_i18n.get(LocaleKeys.DIR_DOESNT_EXIST, [arg]));
         }
     })
     .option('out', {
@@ -47,9 +48,9 @@ const argv = yargs(hideBin(process.argv))
                 if (fs.statSync(absPath).isDirectory()) {
                     return absPath;
                 }
-                throw new Error(`Mentioned location is not a directory: ${arg}`);
+                throw new Error(app_i18n.get(LocaleKeys.LOCATION_IS_NOT_DIR, [arg]));
             }
-            throw new Error(`Cannot resolve mentioned output directory: ${arg}`);
+            throw new Error(app_i18n.get(LocaleKeys.DIR_DOESNT_EXIST, [arg]));
         }
     })
     .argv;

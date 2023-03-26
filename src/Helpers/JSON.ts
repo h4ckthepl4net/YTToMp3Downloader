@@ -4,7 +4,7 @@ import {
     JSONStringTooLarge
 } from '../Exceptions/JSONExceptions.js';
 
-export default class JSON {
+export default class JSONHelper {
     public static parse(json: string): Object {
         try {
             return JSON.parse(json);
