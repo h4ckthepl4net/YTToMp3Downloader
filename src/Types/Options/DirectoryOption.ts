@@ -12,7 +12,7 @@ export class DirectoryOption extends BaseOption {
         public defaultPath?: string, 
         public normalize: boolean = true,
         strictCheck: boolean = true,
-        public coerce = coerceDirectory.bind(null, app_i18n, strictCheck)
+        public coerce = coerceDirectory.bind(null, app_i18n, strictCheck, defaultPath)
     ) {
         const type: YargOptionType = 'string';
         super(type, alias, description);

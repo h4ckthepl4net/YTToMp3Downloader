@@ -1,7 +1,11 @@
 {
 	"tracks_description": "Track names to download",
-	"track_dir_description": "Directory to download tracks by reading names from files in this directory",
+	"track_dir_description": "Download tracks by reading names from files in this directory",
+	"track_file_description": "Download tracks by reading names from mentioned file",
 	"location_is_not_dir": "Mentioned location is not a directory: ${1}",
-	"directory_doesnt_exists": "Cannot resolve mentioned output directory: ${1}",
-	"out_dir_description": "Output directory"
+	"location_is_dir": "Mentioned location is a directory: ${1}",
+	"out_directory_doesnt_exists": "Cannot resolve mentioned output directory: ${1}",
+	"file_doesnt_exist": "Cannot resolve mentioned file: ${1}",
+	"out_dir_description": "Output directory",
+	"no_file_stats": "Cannot read file properties. Check file permissions and existance: ${1}"
 }

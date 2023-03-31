@@ -69,3 +69,15 @@ export class ReadOnlyFSException extends Error {
         super(message);
     }
 }
+
+export class FileContentTooBigToBeWrittenException extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class ResourceAlreadyBusyException extends Error {
+    constructor(message: string) {
+        super(message);
+    }
+}

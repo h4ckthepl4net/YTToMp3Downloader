@@ -13,26 +13,17 @@ import {
     FileNameTooLongException,
     PathIsNotDirectoryException,
     ReadOnlyFSException,
+    FileContentTooBigToBeWrittenException,
+    ResourceAlreadyBusyException,
 } from '../Exceptions/FileSystemExceptions.js';
 import Path from './Path.js';
 
 export default class FileSystem {
-    public static readFileSync(
-            path: fs.PathOrFileDescriptor,
-            options?:
-                | {
-                    encoding?: BufferEncoding;
-                    flag?: string | undefined;
-                }
-                | BufferEncoding
-                | null
-                | undefined
-
-        ): Buffer | string {
+    public static readFileSync(...args: Parameters<typeof fs.readFileSync>): ReturnType<typeof fs.readFileSync> {
 
         try {
 
-            return fs.readFileSync(path, options);
+            return fs.readFileSync(...args);
 
         } catch (exception: unknown) {
 
@@ -67,9 +58,9 @@ export default class FileSystem {
         }
     }
 
-    public static existsSync(path: fs.PathLike): Boolean {
+    public static existsSync(...args: Parameters<typeof fs.existsSync>): ReturnType<typeof fs.existsSync> {
         try {
-            return fs.existsSync(path);
+            return fs.existsSync(...args);
         } catch (exception: unknown) {
             if (exception instanceof RangeError) {
                 throw new PathTooLongException(exception.message);
@@ -80,9 +71,9 @@ export default class FileSystem {
         }
     }
 
-    public static statSync(path: fs.PathLike): fs.Stats {
+    public static statSync(...args: Parameters<typeof fs.statSync>): ReturnType<typeof fs.statSync> {
         try {
-            return fs.statSync(path);
+            return fs.statSync(...args);
         } catch (exception: unknown) {
             if (exception instanceof RangeError) {
                 throw new PathTooLongException(exception.message);
@@ -93,13 +84,10 @@ export default class FileSystem {
         }
     }
 
-    public static mkdirSync(
-        path: fs.PathLike,
-        options?: fs.MakeDirectoryOptions | number | null | undefined
-    ): string | undefined {
+    public static mkdirSync(...args: Parameters<typeof fs.mkdirSync>): ReturnType<typeof fs.mkdirSync> {
         try {
 
-            return fs.mkdirSync(path, options);
+            return fs.mkdirSync(...args);
 
         } catch (exception: unknown) {
 
@@ -130,15 +118,54 @@ export default class FileSystem {
         }
     }
 
-    public static createFolderStructure(folderPath: string): void {
-        const folders = folderPath.split(Path.sep);
-        let currentPath = '';
+    public static writeFileSync(...args: Parameters<typeof fs.writeFileSync>): ReturnType<typeof fs.writeFileSync> {
+        try {
 
-        for (let i = 0; i < folders.length; i++) {
-            currentPath = Path.join(currentPath, folders[i]);
-            if (!FileSystem.existsSync(currentPath)) {
-                FileSystem.mkdirSync(currentPath);
+            return fs.writeFileSync(...args);
+
+        } catch (exception: unknown) {
+
+            let exceptionToRethrow = exception as NodeJS.ErrnoException;
+
+            if (exception instanceof RangeError) {
+                exceptionToRethrow = new FileContentTooBigToBeWrittenException(exception.message);
+            } else if (exception instanceof TypeError) {
+                exceptionToRethrow = new InvalidArgumentException(exception.message);
+            } else {
+                switch ((exception as NodeJS.ErrnoException).code) {
+                    case FileSystemErrors.PERMISSION_DENIED:
+                        exceptionToRethrow = new PermissionDeniedException(exceptionToRethrow.message);
+                        break;
+                    case FileSystemErrors.RESOURCE_BUSY:
+                        exceptionToRethrow = new ResourceAlreadyBusyException(exceptionToRethrow.message);
+                        break;
+                    case FileSystemErrors.FILENAME_TOO_LONG:
+                        exceptionToRethrow = new FileNameTooLongException(exceptionToRethrow.message);
+                        break;
+                    case FileSystemErrors.IO_ERROR:
+                        exceptionToRethrow = new IOException(exceptionToRethrow.message);
+                        break;
+                    case FileSystemErrors.FILE_IS_DIR:
+                        exceptionToRethrow = new PathIsDirectoryException(exceptionToRethrow.message);
+                        break;
+                    case FileSystemErrors.FS_IS_READ_ONLY:
+                        exceptionToRethrow = new ReadOnlyFSException(exceptionToRethrow.message);
+                        break;
+                }
             }
+
+            throw exceptionToRethrow;
         }
+    }
+
+    public static createFileRecursively(filePath: string): string {
+        filePath = Path.resolve(filePath);
+        if (FileSystem.existsSync(filePath)) {
+            return filePath;
+        }
+        const dir = Path.dirname(filePath);
+        FileSystem.mkdirSync(dir, {recursive: true});
+        FileSystem.writeFileSync(filePath, '');
+        return filePath;
     }
 }

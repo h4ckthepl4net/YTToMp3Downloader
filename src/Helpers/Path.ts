@@ -8,6 +8,8 @@ export default class Path {
 
     public static dirname = path.dirname;
 
+    public static filename = path.basename;
+
     public static dirnameFromFileUrl(urlToTransform: string): string {
         return Path.dirname(Path.urlToFilePath(urlToTransform));
     }
@@ -17,4 +19,5 @@ export default class Path {
     public static resolve = path.resolve;
 
     public static sep = path.sep;
+
 }

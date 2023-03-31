@@ -17,13 +17,13 @@ export class Locale {
         if (!this.parsed[key]) {
             return key;
         }
-        const text = this.parsed[key];
+        let text = this.parsed[key];
         if (args && args instanceof Array) {
             args.forEach((arg: any, index: number) => {
-                text.replace(`\${${index}}`, arg);
+                text = text.replace(new RegExp(`\\\$\\\{${index+1}\\\}`, 'g'), arg);
             })
         }
-        return this.parsed[key];
+        return text;
     }
 
     private static readLocaleFile(localeFile: string, fallback: string | null = null): LocaleFileReadResult {
